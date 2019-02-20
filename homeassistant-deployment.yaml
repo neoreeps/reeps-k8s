@@ -1,0 +1,69 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: homeassistant-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homeassistant
+  template:
+    metadata:
+      labels:
+        app: homeassistant
+    spec:
+      containers:
+      - name: homeassistant-container
+        image: homeassistant/raspberrypi3-homeassistant:0.87.1
+        imagePullPolicy: Always
+        #ports:
+        #  - name: haas
+        #    containerPort: 8123
+        #    hostPort: 8123
+        volumeMounts:
+          - mountPath: /config
+            name: config
+          - mountPath: /etc/localtime
+            name: localtime
+      volumes:
+        - name: config
+          hostPath:
+            path: /data/ha-config
+            type: Directory
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+            type: File
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: homeassistant-service
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8123
+    #- name: https
+    #port: 443
+    #targetPort: 8123
+  selector:
+    app: homeassistant
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: homeassistant-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    #traefik.ingress.kubernetes.io/redirect-entry-point: https
+    #traefik.ingress.kubernetes.io/redirect-permanent: "true"
+spec:
+  rules:
+  - host: ha.reeps.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: homeassistant-service
+          servicePort: http
