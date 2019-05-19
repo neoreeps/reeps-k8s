@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: homeassistant-container
-        image: homeassistant/raspberrypi3-homeassistant:0.90.2
+        image: homeassistant/raspberrypi3-homeassistant:0.93.1
         imagePullPolicy: Always
         #ports:
         #  - name: haas
@@ -60,7 +60,7 @@ metadata:
     #traefik.ingress.kubernetes.io/redirect-permanent: "true"
 spec:
   rules:
-  - host: ha.reeps.io
+  - host: home.reeps.io
     http:
       paths:
       - path: /
