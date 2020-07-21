@@ -1,19 +1,19 @@
-apiVersion: extensions/v1beta1
 kind: Deployment
+apiVersion: apps/v1
 metadata:
-  name: nginx-deployment
+  name: www-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: nginx
+      app: www-nginx
   template:
     metadata:
       labels:
-        app: nginx
+        app: www-nginx
     spec:
       containers:
-      - name: nginx-container
+      - name: www-container
         image: nginx:latest
         imagePullPolicy: Always
         volumeMounts:
@@ -36,27 +36,27 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-service
+  name: www-service
 spec:
   ports:
   - name: http
     port: 80
     targetPort: 80
   selector:
-    app: nginx
+    app: www-nginx
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: nginx-ingress
+  name: www-ingress
   annotations:
     kubernetes.io/ingress.class: traefik
 spec:
   rules:
-  - host: nginx.reeps.io
+  - host: www.reeps.io
     http:
       paths:
       - path: /
         backend:
-          serviceName: nginx-service
+          serviceName: www-service
           servicePort: http

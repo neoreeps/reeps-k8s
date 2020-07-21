@@ -41,6 +41,8 @@ data:
     ## Force to use API V3 (otherwise still use API V2)
     #useAPIV3 = true
 
+    # https://docs.traefik.io/v1.7/configuration/acme/
+
     # Let's encrypt configuration
     [acme]
     email = "kenny@reeps.io"
@@ -48,7 +50,7 @@ data:
     storage = "/acme/acme.json"
     entryPoint = "https"
     acmeLogging = true
-    onDemand = false # DEPRECATED - create certificate on first access
+    #onDemand = true # DEPRECATED - create certificate on first access
     onHostRule = true  # true for non-wildcard
     # Use a HTTP-01 acme challenge rather than TLS-SNI-01 challenge
     [acme.httpChallenge]

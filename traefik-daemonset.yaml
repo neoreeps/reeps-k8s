@@ -1,4 +1,4 @@
-kind: StatefulSet
+kind: DaemonSet
 apiVersion: apps/v1
 metadata:
   name: traefik-ingress-controller
@@ -6,8 +6,6 @@ metadata:
   labels:
     k8s-app: traefik-ingress-lb
 spec:
-  serviceName: traefik-ingress-lb
-  replicas: 2
   selector:
     matchLabels:
       k8s-app: traefik-ingress-lb
