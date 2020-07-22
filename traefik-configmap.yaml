@@ -32,21 +32,12 @@ data:
     [ping]
     entryPoint = "http"
 
-    #[etcd]
-    #endpoint = ":2379"
-    ## Enable watch Etcd changes.
-    #watch = true
-    ## Prefix used for KV store.
-    #prefix = "/traefik"
-    ## Force to use API V3 (otherwise still use API V2)
-    #useAPIV3 = true
-
     # https://docs.traefik.io/v1.7/configuration/acme/
 
     # Let's encrypt configuration
     [acme]
     email = "kenny@reeps.io"
-    #storage = "traefik/acme/account" # key/value store
+    # /acme is volume mount from /data on all nodes
     storage = "/acme/acme.json"
     entryPoint = "https"
     acmeLogging = true
@@ -55,7 +46,3 @@ data:
     # Use a HTTP-01 acme challenge rather than TLS-SNI-01 challenge
     [acme.httpChallenge]
     entryPoint = "http"
-
-    #[[acme.domains]]
-    #main = "*.reeps.io"
-    #sans = ["reeps.io", "whoami.reeps.io", "whoareyou.reeps.io", "home.reeps.io"]
