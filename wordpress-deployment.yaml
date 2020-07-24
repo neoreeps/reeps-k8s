@@ -1,0 +1,75 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: wordpress-deployment
+  labels:
+    app: wordpress
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        tier: frontend
+    spec:
+      # Use the Stork scheduler to enable more efficient placement of the pods
+      #schedulerName: stork
+      containers:
+      - image: wordpress:5.4-apache
+        name: wordpress
+        imagePullPolicy:
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: wordpress-mariadb
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-pass
+              key: mariadb-secret.txt
+        ports:
+        - containerPort: 80
+          name: wordpress
+        volumeMounts:
+        - name: wordpress-storage
+          mountPath: /var/www/html
+      volumes:
+      - name: wordpress-storage
+        hostPath:
+            path: /data/wp-html
+            type: Directory
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: wordpress-service
+  labels:
+    app: wordpress
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  selector:
+    app: wordpress
+    tier: frontend
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: wp-ingress
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: www.reeps.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: wordpress-service
+          servicePort: http

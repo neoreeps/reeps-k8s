@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-mariadb
+  labels:
+    app: wordpress
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        tier: mariadb
+    spec:
+      # Use the Stork scheduler to enable more efficient placement of the pods
+      #schedulerName: stork
+      containers:
+      - image: linuxserver/mariadb
+        imagePullPolicy:
+        name: mariadb
+        env:
+          # $ kubectl create secret generic mariadb-pass --from-file=password.txt
+          # make sure password.txt does not have a trailing newline
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-pass
+              key: mariadb-secret.txt
+        ports:
+        - containerPort: 3306
+          name: mariadb
+        volumeMounts:
+        - name: mariadb-storage
+          mountPath: /config
+      volumes:
+      - name: mariadb-storage
+        hostPath:
+            path: /data/mariadb/
+            type: Directory
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: wordpress-mariadb
+  labels:
+    app: wordpress
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: wordpress
+    tier: mariadb

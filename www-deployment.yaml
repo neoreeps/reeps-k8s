@@ -9,8 +9,7 @@ spec:
       app: www-nginx
   template:
     metadata:
-      labels:
-        app: www-nginx
+      labels: app: www-nginx
     spec:
       containers:
       - name: www-container
@@ -33,8 +32,8 @@ spec:
             path: /etc/localtime
             type: File
 ---
-apiVersion: v1
 kind: Service
+apiVersion: v1
 metadata:
   name: www-service
 spec:
@@ -45,8 +44,8 @@ spec:
   selector:
     app: www-nginx
 ---
-apiVersion: extensions/v1beta1
 kind: Ingress
+apiVersion: extensions/v1beta1
 metadata:
   name: www-ingress
   annotations:
