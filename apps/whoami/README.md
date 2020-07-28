@@ -2,7 +2,7 @@
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/containous/whoami.svg)](https://hub.docker.com/r/containous/whoami/)
 
-Tiny Go webserver that prints os information and HTTP request to output
+Tiny Go webserver (from containous) that prints os information and HTTP request to output
 
 ```console
 $ docker run -d -P --name iamfoo containous/whoami
