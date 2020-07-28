@@ -219,7 +219,3 @@ spec:
             drop:
             - all
           readOnlyRootFilesystem: true
-
----
-
-
