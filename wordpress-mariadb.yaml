@@ -54,3 +54,4 @@ spec:
   selector:
     app: wordpress
     tier: mariadb
+  clusterIP: None

@@ -1,9 +1,8 @@
+kind: DaemonSet
 apiVersion: apps/v1
-kind: Deployment
 metadata:
   name: whoareyou-deployment
 spec:
-  replicas: 4
   selector:
     matchLabels:
       app: whoareyou
