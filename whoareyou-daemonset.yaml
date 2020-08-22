@@ -1,7 +1,7 @@
 kind: DaemonSet
 apiVersion: apps/v1
 metadata:
-  name: whoareyou-deployment
+  name: whoareyou
 spec:
   selector:
     matchLabels:
