@@ -41,6 +41,8 @@ spec:
         hostPath:
             path: /data/mariadb/
             type: Directory
+      nodeSelector:
+        hw: rpi4
 ---
 kind: Service
 apiVersion: v1

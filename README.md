@@ -18,5 +18,4 @@ https://hub.docker.com/r/linuxserver/mariadb
 
 To Install Flannel (in lieue of weave-net)
 ```
-curl -sSL https://raw.githubusercontent.com/coreos/flannel/v0.12.0/Documentation/kube-flannel.yml | kubectl apply -f -
 ```

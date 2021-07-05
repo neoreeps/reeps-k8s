@@ -1,31 +1,33 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: wordpress
+  name: wp-susan
   labels:
-    app: wordpress
+    app: wp-susan
 spec:
   selector:
     matchLabels:
-      app: wordpress
-  replicas: 2
+      app: wp-susan
+  replicas: 1
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: wordpress
+        app: wp-susan
         tier: frontend
     spec:
       # Use the Stork scheduler to enable more efficient placement of the pods
       #schedulerName: stork
       containers:
       - image: wordpress:5.5-apache
-        name: wordpress
+        name: wp-susan
         imagePullPolicy: Always
         env:
         - name: WORDPRESS_DB_HOST
           value: mariadb-service
+        - name: WORDPRESS_DB_NAME
+          value: susan
         - name: WORDPRESS_DB_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -33,45 +35,43 @@ spec:
               key: mariadb-secret.txt
         ports:
         - containerPort: 80
-          name: wordpress
+          name: wp-susan
         volumeMounts:
         - name: wordpress-storage
           mountPath: /var/www/html
       volumes:
       - name: wordpress-storage
         hostPath:
-            path: /data/wp-html
+            path: /data/wp-susan
             type: Directory
-      nodeSelector:
-        hw: rpi4
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  name: wordpress-service
+  name: wp-susan-service
   labels:
-    app: wordpress
+    app: wp-susan
 spec:
   ports:
   - name: http
     port: 80
     targetPort: 80
   selector:
-    app: wordpress
+    app: wp-susan
     tier: frontend
 ---
 kind: Ingress
 apiVersion: extensions/v1beta1
 metadata:
-  name: wp-ingress
+  name: wp-susan-ingress
   annotations:
     kubernetes.io/ingress.class: traefik
 spec:
   rules:
-  - host: www.reeps.io
+  - host: susan.reeps.io
     http:
       paths:
       - path: /
         backend:
-          serviceName: wordpress-service
+          serviceName: wp-susan-service
           servicePort: http

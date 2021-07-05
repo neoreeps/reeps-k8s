@@ -5,7 +5,7 @@ metadata:
   namespace: kube-system
 data:
   traefik.toml: |
-    defaultEntryPoints = ["http","https"]
+    defaultEntryPoints = ["http","https","raven"]
     debug = false
     logLevel = "INFO"
 
@@ -15,8 +15,8 @@ data:
       [entryPoints.http]
       address = ":80"
       compress = true
-        [entryPoints.http.redirect]
-        entryPoint = "https"
+        #[entryPoints.http.redirect]
+        #  entryPoint = "https"
       [entryPoints.https]
       address = ":443"
       compress = true
@@ -32,6 +32,7 @@ data:
     [ping]
     entryPoint = "http"
 
+    # some documentation
     # https://docs.traefik.io/v1.7/configuration/acme/
 
     # Let's encrypt configuration
