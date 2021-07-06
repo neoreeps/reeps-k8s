@@ -16,13 +16,23 @@ spec:
       - name: raven-container
         image: neoreeps/raven
         command: ["/home/raven/start.sh"]
-        args: ["-addnode=165.232.129.128",
+        args: ["-conf=/home/raven/.raven/raven.conf",
+               "-datadir=/raven-data",
+               "-addnode=165.232.129.128",
                "-addnode=76.103.93.14",
                "-addnode=71.202.82.78",
                "-addnode=159.65.98.117",
                "-addnode=104.6.159.124",
                "-addnode=73.48.154.249",
                "-addnode=24.10.21.208"]
+        volumeMounts:
+          - name: raven-data
+            mountPath: /raven-data
+      volumes:
+        - name: raven-data
+          hostPath:
+            path: /data/raven-data
+            type: Directory
       nodeSelector:
         hw: rpi4
 ---
