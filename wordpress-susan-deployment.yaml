@@ -20,7 +20,7 @@ spec:
       # Use the Stork scheduler to enable more efficient placement of the pods
       #schedulerName: stork
       containers:
-      - image: wordpress:5.5-apache
+      - image: wordpress:5.9.3-apache
         name: wp-susan
         imagePullPolicy: Always
         env:
